@@ -17,15 +17,6 @@ logger.addHandler(file_handler)
 class CSVAggregator:
     """
         CSVAggregator, aggregates the rows of a csv file and performs a group by on a specified tuple.
-        Assumption is that the first row of csv contains column headings
-
-        Limitations:
-            CSVAggregator can handle most group by headings, however, to handle date, the heading must be specified
-            as Date. The group by clause will then group the date by month and year.
-            Group by can only aggregate one field and only performs SUM and COUNT on that field, thus this field must be
-            of type float or int.
-
-            The CSV Files must also be , delimited
 
     """
     __AGGREGATE_FIELDS = ['Sum', 'Count']
@@ -38,7 +29,9 @@ class CSVAggregator:
             logger.info("Error opening files")
             logger.exception("Exception Message")
             raise e
-
+    '''
+        Performs SUM and COUNT on the AMOUNT FIELD
+    '''
     @staticmethod
     def aggregate(record, header_row, fields, agg_field, acc):
         agg = float(record[header_row.index(agg_field)])
@@ -55,7 +48,6 @@ class CSVAggregator:
     '''
         Returns Date in the Month, Year format
     '''
-
     @staticmethod
     def return_date_grouping(date):
         d = datetime.datetime.strptime(date, "'%d-%b-%Y'")
